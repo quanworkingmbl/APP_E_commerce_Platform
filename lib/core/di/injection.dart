@@ -19,6 +19,8 @@ import '../../features/order/data/repositories/order_repository.dart';
 import '../../features/order/presentation/bloc/address_bloc.dart';
 import '../../features/order/presentation/bloc/checkout_bloc.dart';
 import '../../features/order/presentation/bloc/order_bloc.dart';
+import '../../features/payment/data/datasources/payment_remote_datasource.dart';
+import '../../features/payment/data/repositories/payment_repository.dart';
 
 final getIt = GetIt.instance;
 
@@ -44,6 +46,8 @@ Future<void> configureDependencies() async {
     ..registerLazySingleton(() => AddressRepository(getIt<AddressRemoteDataSource>()))
     ..registerLazySingleton(() => ShippingRepository(getIt<ShippingRemoteDataSource>()))
     ..registerLazySingleton(() => OrderRepository(getIt<OrderRemoteDataSource>()))
+    ..registerLazySingleton(() => PaymentRemoteDataSource(getIt<DioClient>()))
+    ..registerLazySingleton(() => PaymentRepository(getIt<PaymentRemoteDataSource>()))
     ..registerFactory(() => AuthCubit(getIt<AuthRepository>()))
     ..registerFactory(() => ProductListBloc(getIt<CatalogRepository>()))
     ..registerFactory(() => ProductDetailBloc(getIt<CatalogRepository>()))

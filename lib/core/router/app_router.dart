@@ -22,6 +22,9 @@ import '../../features/order/presentation/pages/address_book_page.dart';
 import '../../features/order/presentation/pages/checkout_page.dart';
 import '../../features/order/presentation/pages/order_detail_page.dart';
 import '../../features/order/presentation/pages/order_list_page.dart';
+import '../../features/payment/presentation/pages/payment_failure_page.dart';
+import '../../features/payment/presentation/pages/payment_success_page.dart';
+import '../../features/payment/presentation/pages/payment_webview_page.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 
@@ -176,6 +179,26 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<OrderBloc>(),
           child: OrderDetailPage(orderId: int.parse(state.pathParameters['id']!)),
+        ),
+      ),
+      GoRoute(
+        path: '/payment/success',
+        builder: (context, state) {
+          final orderId = int.tryParse(state.uri.queryParameters['orderId'] ?? '') ?? 0;
+          return PaymentSuccessPage(orderId: orderId);
+        },
+      ),
+      GoRoute(
+        path: '/payment/failure',
+        builder: (context, state) {
+          final orderId = int.tryParse(state.uri.queryParameters['orderId'] ?? '') ?? 0;
+          return PaymentFailurePage(orderId: orderId);
+        },
+      ),
+      GoRoute(
+        path: '/payment/:orderId',
+        builder: (context, state) => PaymentWebViewPage(
+          orderId: int.parse(state.pathParameters['orderId']!),
         ),
       ),
     ],

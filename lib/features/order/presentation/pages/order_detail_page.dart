@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -53,10 +54,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     children: [
                       Text(order.orderNumber, style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(height: 8),
-                      Chip(
-                        label: Text(orderStatusLabel(order.status)),
-                        backgroundColor: orderStatusColor(order.status).withValues(alpha: 0.15),
-                        labelStyle: TextStyle(color: orderStatusColor(order.status)),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          Chip(
+                            label: Text(orderStatusLabel(order.status)),
+                            backgroundColor: orderStatusColor(order.status).withValues(alpha: 0.15),
+                            labelStyle: TextStyle(color: orderStatusColor(order.status)),
+                          ),
+                          Chip(
+                            label: Text(paymentStatusLabel(order.paymentStatus)),
+                            backgroundColor: paymentStatusColor(order.paymentStatus).withValues(alpha: 0.15),
+                            labelStyle: TextStyle(color: paymentStatusColor(order.paymentStatus)),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 12),
                       Text('Người nhận: ${order.recipientName}'),
@@ -135,6 +147,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               if (order.status == 'PENDING_PAYMENT') ...[
                 const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => context.push('/payment/${order.id}'),
+                  child: const Text('Thanh toán ngay'),
+                ),
+                const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: state.status == OrderStatusEnum.updating
                       ? null

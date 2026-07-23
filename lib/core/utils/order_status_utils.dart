@@ -25,3 +25,21 @@ Color orderStatusColor(String status) {
     _ => Colors.grey,
   };
 }
+
+String paymentStatusLabel(String status) {
+  return switch (status) {
+    'UNPAID' => 'Chưa thanh toán',
+    'PAID' => 'Đã thanh toán',
+    'REFUNDED' => 'Đã hoàn tiền',
+    _ => status,
+  };
+}
+
+Color paymentStatusColor(String status) {
+  return switch (status) {
+    'UNPAID' => Colors.orange,
+    'PAID' => Colors.green,
+    'REFUNDED' => Colors.deepOrange,
+    _ => Colors.grey,
+  };
+}

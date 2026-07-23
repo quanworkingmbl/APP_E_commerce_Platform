@@ -227,7 +227,7 @@ class _BottomBar extends StatelessWidget {
                           final order = context.read<CheckoutBloc>().state.createdOrder;
                           getIt<CartBloc>().load();
                           if (order != null) {
-                            context.go('/orders/${order.id}');
+                            context.go('/payment/${order.id}');
                           }
                         }
                       },
