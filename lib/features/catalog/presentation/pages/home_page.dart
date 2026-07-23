@@ -7,7 +7,9 @@ import '../widgets/product_card.dart';
 import '../../data/models/catalog_models.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.title = 'E-Commerce'});
+
+  final String title;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,10 +38,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('E-Commerce'),
+        title: Text(widget.title),
         actions: [
           IconButton(icon: const Icon(Icons.search), onPressed: () => context.push('/search')),
-          IconButton(icon: const Icon(Icons.person_outline), onPressed: () => context.push('/profile')),
+          if (widget.title == 'E-Commerce')
+            IconButton(icon: const Icon(Icons.person_outline), onPressed: () => context.push('/profile')),
         ],
       ),
       body: BlocBuilder<ProductListBloc, ProductListState>(

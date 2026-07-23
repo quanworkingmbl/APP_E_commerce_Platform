@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/format_utils.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../data/models/catalog_models.dart';
 import '../bloc/product_detail_bloc.dart';
 
@@ -120,9 +122,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     child: ElevatedButton(
                       onPressed: selected == null
                           ? null
-                          : () {
+                          : () async {
+                              final variant = selected;
+                              final ok = await getIt<CartBloc>().addItem(
+                                variantId: variant.id,
+                                quantity: 1,
+                              );
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Giỏ hàng sẽ có ở module Cart')),
+                                SnackBar(
+                                  content: Text(ok ? 'Đã thêm vào giỏ hàng' : 'Không thể thêm vào giỏ'),
+                                ),
                               );
                             },
                       child: const Text('Thêm vào giỏ'),

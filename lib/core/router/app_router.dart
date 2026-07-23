@@ -5,6 +5,8 @@ import '../storage/token_storage.dart';
 import '../../features/auth/presentation/bloc/auth_cubit.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
+import '../../features/cart/presentation/bloc/cart_bloc.dart';
+import '../../features/cart/presentation/pages/cart_page.dart';
 import '../../features/catalog/presentation/bloc/product_detail_bloc.dart';
 import '../../features/catalog/presentation/bloc/product_list_bloc.dart';
 import '../../features/catalog/presentation/bloc/search_bloc.dart';
@@ -13,6 +15,7 @@ import '../../features/catalog/presentation/pages/product_detail_page.dart';
 import '../../features/catalog/presentation/pages/search_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 
 class AppRouter {
@@ -75,12 +78,56 @@ class AppRouter {
           child: const RegisterPage(),
         ),
       ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => BlocProvider(
-          create: (_) => getIt<ProductListBloc>(),
-          child: const HomePage(),
-        ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return BlocProvider.value(
+            value: getIt<CartBloc>(),
+            child: MainShellPage(navigationShell: navigationShell),
+          );
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => BlocProvider(
+                  create: (_) => getIt<ProductListBloc>(),
+                  child: const HomePage(),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/categories',
+                builder: (context, state) => BlocProvider(
+                  create: (_) => getIt<ProductListBloc>(),
+                  child: const HomePage(title: 'Danh mục'),
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/cart',
+                builder: (context, state) => const CartPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => BlocProvider.value(
+                  value: getIt<AuthCubit>()..checkSession(),
+                  child: const ProfilePage(),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: '/search',
@@ -94,13 +141,6 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<ProductDetailBloc>(),
           child: ProductDetailPage(slug: state.pathParameters['slug']!),
-        ),
-      ),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => BlocProvider.value(
-          value: getIt<AuthCubit>()..checkSession(),
-          child: const ProfilePage(),
         ),
       ),
     ],

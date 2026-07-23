@@ -11,6 +11,9 @@ import '../../features/catalog/data/repositories/catalog_repository.dart';
 import '../../features/catalog/presentation/bloc/product_detail_bloc.dart';
 import '../../features/catalog/presentation/bloc/product_list_bloc.dart';
 import '../../features/catalog/presentation/bloc/search_bloc.dart';
+import '../../features/cart/data/datasources/cart_remote_datasource.dart';
+import '../../features/cart/data/repositories/cart_repository.dart';
+import '../../features/cart/presentation/bloc/cart_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -27,6 +30,9 @@ Future<void> configureDependencies() async {
     ..registerLazySingleton(() => AuthRepository(getIt<AuthRemoteDataSource>()))
     ..registerLazySingleton(() => CatalogRemoteDataSource(getIt<DioClient>()))
     ..registerLazySingleton(() => CatalogRepository(getIt<CatalogRemoteDataSource>()))
+    ..registerLazySingleton(() => CartRemoteDataSource(getIt<DioClient>()))
+    ..registerLazySingleton(() => CartRepository(getIt<CartRemoteDataSource>()))
+    ..registerLazySingleton(() => CartBloc(getIt<CartRepository>()))
     ..registerFactory(() => AuthCubit(getIt<AuthRepository>()))
     ..registerFactory(() => ProductListBloc(getIt<CatalogRepository>()))
     ..registerFactory(() => ProductDetailBloc(getIt<CatalogRepository>()))
