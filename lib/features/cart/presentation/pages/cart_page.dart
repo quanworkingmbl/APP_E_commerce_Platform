@@ -282,11 +282,7 @@ class _SummarySection extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Thanh toán sẽ có ở Phase 4')),
-                  );
-                },
+                onPressed: () => context.push('/checkout'),
                 child: const Text('Thanh toán'),
               ),
             ),

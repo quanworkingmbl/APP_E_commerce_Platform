@@ -15,6 +15,13 @@ import '../../features/catalog/presentation/pages/product_detail_page.dart';
 import '../../features/catalog/presentation/pages/search_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/order/presentation/bloc/address_bloc.dart';
+import '../../features/order/presentation/bloc/checkout_bloc.dart';
+import '../../features/order/presentation/bloc/order_bloc.dart';
+import '../../features/order/presentation/pages/address_book_page.dart';
+import '../../features/order/presentation/pages/checkout_page.dart';
+import '../../features/order/presentation/pages/order_detail_page.dart';
+import '../../features/order/presentation/pages/order_list_page.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 
@@ -141,6 +148,34 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (_) => getIt<ProductDetailBloc>(),
           child: ProductDetailPage(slug: state.pathParameters['slug']!),
+        ),
+      ),
+      GoRoute(
+        path: '/checkout',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<CheckoutBloc>()..init(),
+          child: const CheckoutPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/addresses',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<AddressBloc>(),
+          child: const AddressBookPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/orders',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<OrderBloc>()..loadOrders(),
+          child: const OrderListPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/orders/:id',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<OrderBloc>(),
+          child: OrderDetailPage(orderId: int.parse(state.pathParameters['id']!)),
         ),
       ),
     ],

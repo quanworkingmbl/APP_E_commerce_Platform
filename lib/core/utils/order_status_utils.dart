@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+
+String orderStatusLabel(String status) {
+  return switch (status) {
+    'PENDING_PAYMENT' => 'Chờ thanh toán',
+    'CONFIRMED' => 'Đã xác nhận',
+    'PROCESSING' => 'Đang xử lý',
+    'SHIPPING' => 'Đang giao',
+    'DELIVERED' => 'Đã giao',
+    'COMPLETED' => 'Hoàn thành',
+    'CANCELLED' => 'Đã hủy',
+    _ => status,
+  };
+}
+
+Color orderStatusColor(String status) {
+  return switch (status) {
+    'PENDING_PAYMENT' => Colors.orange,
+    'CONFIRMED' => Colors.blue,
+    'PROCESSING' => Colors.cyan,
+    'SHIPPING' => Colors.indigo,
+    'DELIVERED' => Colors.green,
+    'COMPLETED' => Colors.green.shade700,
+    'CANCELLED' => Colors.red,
+    _ => Colors.grey,
+  };
+}

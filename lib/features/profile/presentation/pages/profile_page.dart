@@ -31,9 +31,9 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              _MenuTile(icon: Icons.receipt_long_outlined, title: 'Đơn hàng', subtitle: 'Phase 4', disabled: true),
+              _MenuTile(icon: Icons.receipt_long_outlined, title: 'Đơn hàng', onTap: () => context.push('/orders')),
               _MenuTile(icon: Icons.favorite_border, title: 'Yêu thích', subtitle: 'Phase 2', disabled: true),
-              _MenuTile(icon: Icons.location_on_outlined, title: 'Địa chỉ', subtitle: 'Phase 4', disabled: true),
+              _MenuTile(icon: Icons.location_on_outlined, title: 'Địa chỉ', onTap: () => context.push('/addresses')),
               _MenuTile(icon: Icons.notifications_outlined, title: 'Thông báo', subtitle: 'Phase 6', disabled: true),
               _MenuTile(icon: Icons.lock_outline, title: 'Đổi mật khẩu', subtitle: 'Phase 1+', disabled: true),
               const SizedBox(height: 24),
@@ -57,14 +57,16 @@ class _MenuTile extends StatelessWidget {
   const _MenuTile({
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     this.disabled = false,
+    this.onTap,
   });
 
   final IconData icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final bool disabled;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +74,10 @@ class _MenuTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         enabled: !disabled,
+        onTap: disabled ? null : onTap,
         leading: Icon(icon, color: disabled ? Colors.grey : AppColors.primary),
         title: Text(title),
-        subtitle: Text(subtitle),
+        subtitle: subtitle != null ? Text(subtitle!) : null,
         trailing: disabled ? const Text('Soon', style: TextStyle(color: Colors.grey)) : const Icon(Icons.chevron_right),
       ),
     );
