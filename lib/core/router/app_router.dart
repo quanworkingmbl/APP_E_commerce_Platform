@@ -5,7 +5,12 @@ import '../storage/token_storage.dart';
 import '../../features/auth/presentation/bloc/auth_cubit.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
-import '../../features/home/presentation/pages/home_placeholder_page.dart';
+import '../../features/catalog/presentation/bloc/product_detail_bloc.dart';
+import '../../features/catalog/presentation/bloc/product_list_bloc.dart';
+import '../../features/catalog/presentation/bloc/search_bloc.dart';
+import '../../features/catalog/presentation/pages/home_page.dart';
+import '../../features/catalog/presentation/pages/product_detail_page.dart';
+import '../../features/catalog/presentation/pages/search_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -20,7 +25,7 @@ class AppRouter {
     initialLocation: '/splash',
     redirect: (context, state) async {
       final path = state.matchedLocation;
-      final publicRoutes = ['/splash', '/onboarding', '/login', '/register'];
+      const publicRoutes = ['/splash', '/onboarding', '/login', '/register'];
       if (publicRoutes.contains(path)) return null;
 
       final token = await _tokenStorage.getAccessToken();
@@ -70,7 +75,27 @@ class AppRouter {
           child: const RegisterPage(),
         ),
       ),
-      GoRoute(path: '/home', builder: (context, state) => const HomePlaceholderPage()),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ProductListBloc>(),
+          child: const HomePage(),
+        ),
+      ),
+      GoRoute(
+        path: '/search',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<SearchBloc>(),
+          child: const SearchPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/product/:slug',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ProductDetailBloc>(),
+          child: ProductDetailPage(slug: state.pathParameters['slug']!),
+        ),
+      ),
       GoRoute(
         path: '/profile',
         builder: (context, state) => BlocProvider.value(
