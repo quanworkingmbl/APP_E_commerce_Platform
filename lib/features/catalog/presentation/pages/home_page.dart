@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/error_view.dart';
+import '../../../../core/widgets/product_grid_shimmer.dart';
 import '../../../notification/presentation/bloc/notification_bloc.dart';
 import '../bloc/product_list_bloc.dart';
 import '../widgets/product_card.dart';
@@ -69,17 +71,12 @@ class _HomePageState extends State<HomePage> {
       body: BlocBuilder<ProductListBloc, ProductListState>(
         builder: (context, state) {
           if (state.status == ProductListStatus.loading && state.products.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const ProductGridShimmer();
           }
           if (state.status == ProductListStatus.failure && state.products.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(state.errorMessage ?? 'Lỗi'),
-                  ElevatedButton(onPressed: () => context.read<ProductListBloc>().load(refresh: true), child: const Text('Thử lại')),
-                ],
-              ),
+            return ErrorView(
+              message: state.errorMessage ?? 'Không tải được sản phẩm',
+              onRetry: () => context.read<ProductListBloc>().load(refresh: true),
             );
           }
 

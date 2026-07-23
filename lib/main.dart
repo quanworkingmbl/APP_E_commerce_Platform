@@ -4,6 +4,7 @@ import 'core/di/injection.dart';
 import 'core/router/app_router.dart';
 import 'core/storage/token_storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/offline_banner_wrapper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class ECommerceApp extends StatelessWidget {
       theme: AppTheme.light,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => OfflineBannerWrapper(child: child ?? const SizedBox.shrink()),
     );
   }
 }
