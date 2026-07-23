@@ -88,6 +88,24 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           subtitle: Text('${item.sku} · x${item.quantity}'),
                           trailing: Text(formatVnd(item.lineTotal)),
                         )),
+                    if (order.status == 'DELIVERED' || order.status == 'COMPLETED') ...[
+                      const Divider(height: 1),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: order.items.map((item) {
+                            return OutlinedButton.icon(
+                              onPressed: () => context.push(
+                                '/orders/${order.id}/review?orderItemId=${item.id}&productName=${Uri.encodeComponent(item.productName)}',
+                              ),
+                              icon: const Icon(Icons.rate_review_outlined, size: 18),
+                              label: Text('Đánh giá ${item.productName}', overflow: TextOverflow.ellipsis),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                     const Divider(height: 1),
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -145,6 +163,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ),
               ),
+              if (order.status == 'DELIVERED' || order.status == 'COMPLETED') ...[
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () => context.push('/orders/${order.id}/return'),
+                  icon: const Icon(Icons.assignment_return_outlined),
+                  label: const Text('Yêu cầu trả hàng'),
+                ),
+              ],
               if (order.status == 'PENDING_PAYMENT') ...[
                 const SizedBox(height: 16),
                 ElevatedButton(

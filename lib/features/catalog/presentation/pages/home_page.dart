@@ -1,7 +1,10 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../notification/presentation/bloc/notification_bloc.dart';
 import '../bloc/product_list_bloc.dart';
 import '../widgets/product_card.dart';
 import '../../data/models/catalog_models.dart';
@@ -20,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<ProductListBloc>().load(refresh: true);
+    getIt<NotificationBloc>().refreshUnread();
   }
 
   List<CategoryModel> _flatCategories(List<CategoryModel> roots) {
@@ -41,6 +45,23 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
         actions: [
           IconButton(icon: const Icon(Icons.search), onPressed: () => context.push('/search')),
+          if (widget.title == 'E-Commerce')
+            BlocBuilder<NotificationBloc, NotificationState>(
+              bloc: getIt<NotificationBloc>(),
+              builder: (context, state) {
+                return IconButton(
+                  onPressed: () => context.push('/notifications'),
+                  icon: badges.Badge(
+                    showBadge: state.unreadCount > 0,
+                    badgeContent: Text(
+                      state.unreadCount > 99 ? '99+' : '${state.unreadCount}',
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                    child: const Icon(Icons.notifications_outlined),
+                  ),
+                );
+              },
+            ),
           if (widget.title == 'E-Commerce')
             IconButton(icon: const Icon(Icons.person_outline), onPressed: () => context.push('/profile')),
         ],

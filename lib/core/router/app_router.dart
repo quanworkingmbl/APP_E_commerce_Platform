@@ -25,6 +25,12 @@ import '../../features/order/presentation/pages/order_list_page.dart';
 import '../../features/payment/presentation/pages/payment_failure_page.dart';
 import '../../features/payment/presentation/pages/payment_success_page.dart';
 import '../../features/payment/presentation/pages/payment_webview_page.dart';
+import '../../features/review/presentation/bloc/review_bloc.dart';
+import '../../features/review/presentation/pages/write_review_page.dart';
+import '../../features/notification/presentation/bloc/notification_bloc.dart';
+import '../../features/notification/presentation/pages/notification_list_page.dart';
+import '../../features/return_request/presentation/bloc/return_bloc.dart';
+import '../../features/return_request/presentation/pages/return_request_page.dart';
 import '../../features/shell/presentation/pages/main_shell_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 
@@ -194,6 +200,38 @@ class AppRouter {
           final orderId = int.tryParse(state.uri.queryParameters['orderId'] ?? '') ?? 0;
           return PaymentFailurePage(orderId: orderId);
         },
+      ),
+      GoRoute(
+        path: '/payment/failure',
+        builder: (context, state) {
+          final orderId = int.tryParse(state.uri.queryParameters['orderId'] ?? '') ?? 0;
+          return PaymentFailurePage(orderId: orderId);
+        },
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => BlocProvider.value(
+          value: getIt<NotificationBloc>()..load(),
+          child: const NotificationListPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/orders/:id/review',
+        builder: (context, state) {
+          final orderItemId = int.parse(state.uri.queryParameters['orderItemId'] ?? '0');
+          final productName = state.uri.queryParameters['productName'] ?? 'Sản phẩm';
+          return BlocProvider(
+            create: (_) => getIt<ReviewBloc>(),
+            child: WriteReviewPage(orderItemId: orderItemId, productName: productName),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/orders/:id/return',
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ReturnBloc>(),
+          child: ReturnRequestPage(orderId: int.parse(state.pathParameters['id']!)),
+        ),
       ),
       GoRoute(
         path: '/payment/:orderId',

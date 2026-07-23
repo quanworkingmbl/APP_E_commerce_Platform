@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
               _MenuTile(icon: Icons.receipt_long_outlined, title: 'Đơn hàng', onTap: () => context.push('/orders')),
               _MenuTile(icon: Icons.favorite_border, title: 'Yêu thích', subtitle: 'Phase 2', disabled: true),
               _MenuTile(icon: Icons.location_on_outlined, title: 'Địa chỉ', onTap: () => context.push('/addresses')),
-              _MenuTile(icon: Icons.notifications_outlined, title: 'Thông báo', subtitle: 'Phase 6', disabled: true),
+              _MenuTile(icon: Icons.notifications_outlined, title: 'Thông báo', onTap: () => context.push('/notifications')),
               _MenuTile(icon: Icons.lock_outline, title: 'Đổi mật khẩu', subtitle: 'Phase 1+', disabled: true),
               const SizedBox(height: 24),
               ElevatedButton(

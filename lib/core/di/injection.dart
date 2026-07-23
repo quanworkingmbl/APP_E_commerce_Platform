@@ -21,6 +21,15 @@ import '../../features/order/presentation/bloc/checkout_bloc.dart';
 import '../../features/order/presentation/bloc/order_bloc.dart';
 import '../../features/payment/data/datasources/payment_remote_datasource.dart';
 import '../../features/payment/data/repositories/payment_repository.dart';
+import '../../features/review/data/datasources/review_remote_datasource.dart';
+import '../../features/review/data/repositories/review_repository.dart';
+import '../../features/review/presentation/bloc/review_bloc.dart';
+import '../../features/notification/data/datasources/notification_remote_datasource.dart';
+import '../../features/notification/data/repositories/notification_repository.dart';
+import '../../features/notification/presentation/bloc/notification_bloc.dart';
+import '../../features/return_request/data/datasources/return_remote_datasource.dart';
+import '../../features/return_request/data/repositories/return_repository.dart';
+import '../../features/return_request/presentation/bloc/return_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -48,6 +57,12 @@ Future<void> configureDependencies() async {
     ..registerLazySingleton(() => OrderRepository(getIt<OrderRemoteDataSource>()))
     ..registerLazySingleton(() => PaymentRemoteDataSource(getIt<DioClient>()))
     ..registerLazySingleton(() => PaymentRepository(getIt<PaymentRemoteDataSource>()))
+    ..registerLazySingleton(() => ReviewRemoteDataSource(getIt<DioClient>()))
+    ..registerLazySingleton(() => ReviewRepository(getIt<ReviewRemoteDataSource>()))
+    ..registerLazySingleton(() => NotificationRemoteDataSource(getIt<DioClient>()))
+    ..registerLazySingleton(() => NotificationRepository(getIt<NotificationRemoteDataSource>()))
+    ..registerLazySingleton(() => ReturnRemoteDataSource(getIt<DioClient>()))
+    ..registerLazySingleton(() => ReturnRepository(getIt<ReturnRemoteDataSource>()))
     ..registerFactory(() => AuthCubit(getIt<AuthRepository>()))
     ..registerFactory(() => ProductListBloc(getIt<CatalogRepository>()))
     ..registerFactory(() => ProductDetailBloc(getIt<CatalogRepository>()))
@@ -59,5 +74,8 @@ Future<void> configureDependencies() async {
           getIt<ShippingRepository>(),
           getIt<CartRepository>(),
         ))
-    ..registerFactory(() => OrderBloc(getIt<OrderRepository>()));
+    ..registerFactory(() => OrderBloc(getIt<OrderRepository>()))
+    ..registerFactory(() => ReviewBloc(getIt<ReviewRepository>()))
+    ..registerLazySingleton(() => NotificationBloc(getIt<NotificationRepository>()))
+    ..registerFactory(() => ReturnBloc(getIt<ReturnRepository>()));
 }
